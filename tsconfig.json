@@ -28,5 +28,5 @@
     "skipLibCheck": true
   },
   "includes": ["src/**/*.ts"],
-  "exclude": ["src/**/*.test.ts", "./jest.config.ts"]
+  "exclude": ["src/**/*.test.ts", "./jest.config.ts", "website"]
 }

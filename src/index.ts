@@ -1,4 +1,11 @@
-import hello from './hello';
+import express from "express";
 
-const greet = hello('world');
-console.log(greet);
+import search from "./search";
+
+const app = express();
+app.get("/embed", async (req, res) => {
+  const query = req.query.query?.toString() ?? "";
+  return res.json(search(query));
+});
+
+app.listen(3030);
