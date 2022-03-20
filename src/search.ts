@@ -87,7 +87,7 @@ function trim(str: string) {
 }
 
 function nameToURL(pkg: string, name: string) {
-  const base = `https://discord.js.org/#/docs/${pkg}/stable/class/`;
+  const base = `https://discord.js.org/#/docs/${pkg}/class/`;
   return (
     base +
     name
