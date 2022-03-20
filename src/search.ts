@@ -97,6 +97,19 @@ function nameToURL(pkg: string, name: string) {
   );
 }
 
+function metaToURL(
+  pkg: string,
+  path: string,
+  file?: string,
+  line?: string | number
+) {
+  const [pkgName, _] = pkg.split('/');
+  return (
+    'https://github.com/discordjs/discord.js/blob/main/packages/' +
+    `${pkgName}/${path}${file ? `/${file}` : ''}${line ? `#L${line}` : ''}`
+  );
+}
+
 function getLinkTextToObject(name: string) {
   const item = dict.get(name);
   if (!item) return name;
@@ -183,6 +196,17 @@ export default function search(query: string): MessageEmbedOptions {
       url: nameToURL(item.package, res[0].item),
       description: `${extend ? `*extends ${extend}*` : ''}\n${d.description}`,
       fields,
+      footer: {
+        text:
+          'meta' in d
+            ? `[View Source](${metaToURL(
+                item.package,
+                d.meta.path,
+                d.meta.file,
+                d.meta.line
+              )})`
+            : undefined,
+      },
     };
   } else {
     return {
