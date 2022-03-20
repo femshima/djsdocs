@@ -15,7 +15,7 @@
   },
   "plugins": ["@typescript-eslint"],
   "rules": {
-    "quotes": ["warn", "double"],
+    "quotes": ["warn", "single"],
     "@typescript-eslint/no-unused-vars": ["warn", { "varsIgnorePattern": "^_" }]
   }
 }

@@ -1,64 +1,64 @@
-import Collection from "@discordjs/collection";
-import { EmbedFieldData, MessageEmbedOptions } from "discord.js";
-import Fuse from "fuse.js";
-import { Documentation } from "../website/src/interfaces/Documentation";
-import data from "./data";
+import Collection from '@discordjs/collection';
+import { EmbedFieldData, MessageEmbedOptions } from 'discord.js';
+import Fuse from 'fuse.js';
+import { Documentation } from '../website/src/interfaces/Documentation';
+import data from './data';
 
 function getNameObj<
-  T extends "Name" | "Event" | "Method" | "Prop",
-  K extends "Class" | "Typedef" | "Interface",
+  T extends 'Name' | 'Event' | 'Method' | 'Prop',
+  K extends 'Class' | 'Typedef' | 'Interface',
   U extends { name: string },
   V extends { name: string }
->(type: T, objType: K, a: U, ...bc: T extends "Name" ? [] : [V]) {
+>(type: T, objType: K, a: U, ...bc: T extends 'Name' ? [] : [V]) {
   const b = bc[0];
-  let name = "";
+  let name = '';
   switch (type) {
-    case "Name":
+    case 'Name':
       name = a.name;
       break;
-    case "Event":
+    case 'Event':
       if (!b) return undefined;
       name = `${a.name}#${b.name}`;
       break;
-    case "Method":
+    case 'Method':
       if (!b) return undefined;
       name = `${a.name}.${b.name}()`;
       break;
-    case "Prop":
+    case 'Prop':
       if (!b) return undefined;
       name = `${a.name}.${b.name}`;
   }
-  const obj = type === "Name" ? a : b;
+  const obj = type === 'Name' ? a : b;
   if (!obj) return undefined;
   return {
     name,
     objType,
     memberType: type,
-    obj: obj as T extends "Name" ? U : V,
+    obj: obj as T extends 'Name' ? U : V,
   };
 }
 
 function getEntities(docs: Documentation) {
   return [
     docs.classes?.map((o) => [
-      getNameObj("Name", "Class", o),
-      o.events?.map((e) => getNameObj("Event", "Class", o, e)),
-      o.methods?.map((m) => getNameObj("Method", "Class", o, m)),
-      o.props?.map((p) => getNameObj("Prop", "Class", o, p)),
+      getNameObj('Name', 'Class', o),
+      o.events?.map((e) => getNameObj('Event', 'Class', o, e)),
+      o.methods?.map((m) => getNameObj('Method', 'Class', o, m)),
+      o.props?.map((p) => getNameObj('Prop', 'Class', o, p)),
     ]),
     docs.typedefs?.map((o) => [
-      getNameObj("Name", "Typedef", o),
-      o.props?.map((p) => getNameObj("Prop", "Typedef", o, p)),
+      getNameObj('Name', 'Typedef', o),
+      o.props?.map((p) => getNameObj('Prop', 'Typedef', o, p)),
     ]),
     docs.interfaces?.map((o) => [
-      getNameObj("Name", "Interface", o),
-      o.events?.map((e) => getNameObj("Event", "Interface", o, e)),
-      o.methods?.map((m) => getNameObj("Method", "Interface", o, m)),
-      o.props?.map((p) => getNameObj("Prop", "Interface", o, p)),
+      getNameObj('Name', 'Interface', o),
+      o.events?.map((e) => getNameObj('Event', 'Interface', o, e)),
+      o.methods?.map((m) => getNameObj('Method', 'Interface', o, m)),
+      o.props?.map((p) => getNameObj('Prop', 'Interface', o, p)),
     ]),
   ]
     .flat(3)
-    .filter((v): v is Exclude<typeof v, undefined> => typeof v !== "undefined");
+    .filter((v): v is Exclude<typeof v, undefined> => typeof v !== 'undefined');
 }
 
 function getDict() {
@@ -82,7 +82,7 @@ const fuse = new Fuse(entities);
 
 function trim(str: string) {
   return str
-    .replace(/^(.*?)\s*([.#]\s*(.*?)(\(\))?)?\s*$/g, "$1*$3")
+    .replace(/^(.*?)\s*([.#]\s*(.*?)(\(\))?)?\s*$/g, '$1*$3')
     .toLowerCase();
 }
 
@@ -91,9 +91,9 @@ function nameToURL(pkg: string, name: string) {
   return (
     base +
     name
-      .replace("#", "?scrollTo=e-")
-      .replace(".", "?scrollTo=")
-      .replace("()", "")
+      .replace('#', '?scrollTo=e-')
+      .replace('.', '?scrollTo=')
+      .replace('()', '')
   );
 }
 
@@ -104,26 +104,26 @@ function getLinkTextToObject(name: string) {
 }
 
 function getObjTypeEmoji(
-  objType: "Class" | "Typedef" | "Interface",
-  memberType: "Name" | "Event" | "Method" | "Prop"
+  objType: 'Class' | 'Typedef' | 'Interface',
+  memberType: 'Name' | 'Event' | 'Method' | 'Prop'
 ) {
   switch (memberType) {
-    case "Name":
+    case 'Name':
       switch (objType) {
-        case "Class":
-          return ":regional_indicator_c:";
-        case "Typedef":
-          return ":regional_indicator_t:";
-        case "Interface":
-          return ":regional_indicator_i:";
+        case 'Class':
+          return ':regional_indicator_c:';
+        case 'Typedef':
+          return ':regional_indicator_t:';
+        case 'Interface':
+          return ':regional_indicator_i:';
       }
       break;
-    case "Event":
-      return ":regional_indicator_e:";
-    case "Method":
-      return ":regional_indicator_m:";
-    case "Prop":
-      return ":regional_indicator_p:";
+    case 'Event':
+      return ':regional_indicator_e:';
+    case 'Method':
+      return ':regional_indicator_m:';
+    case 'Prop':
+      return ':regional_indicator_p:';
   }
 }
 
@@ -140,53 +140,53 @@ export default function search(query: string): MessageEmbedOptions {
     const d = item.obj;
 
     const extend =
-      "extends" in d &&
+      'extends' in d &&
       d.extends
         .flat(2)
         .map((d) => getLinkTextToObject(d))
-        .join(",");
+        .join(',');
 
     const fields: EmbedFieldData[] = [];
-    if ("props" in d) {
+    if ('props' in d) {
       fields.push({
-        name: "Properties",
+        name: 'Properties',
         value: d.props
-          .filter((prop) => prop.access !== "private")
+          .filter((prop) => prop.access !== 'private')
           .map((prop) => `\`${prop.name}\` `)
-          .join(""),
+          .join(''),
       });
     }
-    if ("methods" in d) {
+    if ('methods' in d) {
       fields.push({
-        name: "Methods",
+        name: 'Methods',
         value: d.methods
-          .filter((method) => method.access !== "private")
+          .filter((method) => method.access !== 'private')
           .map((method) => `\`${method.name}\` `)
-          .join(""),
+          .join(''),
       });
     }
-    if ("type" in d) {
+    if ('type' in d) {
       fields.push({
-        name: "Type",
+        name: 'Type',
         value: d.type
           .flat(3)
           .map((type) => {
-            if (type === "<" || type === ">" || type === ", ") return type;
+            if (type === '<' || type === '>' || type === ', ') return type;
             return getLinkTextToObject(type);
           })
-          .join(""),
+          .join(''),
       });
     }
 
     return {
       title: `__${res[0].item}__`,
       url: nameToURL(item.package, res[0].item),
-      description: `${extend ? `*extends ${extend}*` : ""}\n${d.description}`,
+      description: `${extend ? `*extends ${extend}*` : ''}\n${d.description}`,
       fields,
     };
   } else {
     return {
-      title: "Search Results:",
+      title: 'Search Results:',
       description: res
         .slice(0, 10)
         .map((r) => {
@@ -198,7 +198,7 @@ export default function search(query: string): MessageEmbedOptions {
             getLinkTextToObject(name)
           );
         })
-        .join("\n"),
+        .join('\n'),
     };
   }
 }
