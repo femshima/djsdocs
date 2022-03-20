@@ -82,7 +82,7 @@ const fuse = new Fuse(entities);
 
 function trim(str: string) {
   return str
-    .replace(/^(.*)\s*([.#]\s*(.*)(\(\))?)?\s*$/g, "$1*$3")
+    .replace(/^(.*?)\s*([.#]\s*(.*?)(\(\))?)?\s*$/g, "$1*$3")
     .toLowerCase();
 }
 
@@ -131,7 +131,7 @@ export default function search(query: string): MessageEmbedOptions {
   const res = fuse.search(query);
   if (
     res[0]?.item &&
-    trim(res[0].item) == trim(query) &&
+    trim(res[0].item) === trim(query) &&
     dict.has(res[0].item)
   ) {
     // The above dict.has guarantees this.
