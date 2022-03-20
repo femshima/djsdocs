@@ -1,0 +1,6 @@
+[submodule "website"]
+	path = website
+	url = https://github.com/discordjs/website.git
+[submodule "data"]
+	path = data
+	url = https://github.com/discordjs/docs.git
