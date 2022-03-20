@@ -99,7 +99,7 @@ function nameToURL(pkg: string, name: string) {
 
 function getLinkTextToObject(name: string) {
   const item = dict.get(name);
-  if (!item) return item;
+  if (!item) return name;
   return `[${name}](${nameToURL(item.package, name)})`;
 }
 
@@ -173,10 +173,9 @@ export default function search(query: string): MessageEmbedOptions {
     }
 
     return {
-      title:
-        `[__${res[0].item}__](${nameToURL(item.package, res[0].item)})` +
-        (extend || ""),
-      description: `${d.description}`,
+      title: `__${res[0].item}__`,
+      url: nameToURL(item.package, res[0].item),
+      description: `${extend ? `*extends ${extend}*` : ""}\n${d.description}`,
       fields,
     };
   } else {
