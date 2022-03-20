@@ -150,13 +150,19 @@ export default function search(query: string): MessageEmbedOptions {
     if ("props" in d) {
       fields.push({
         name: "Properties",
-        value: d.props.map((prop) => `\`${prop.name}\``).join(""),
+        value: d.props
+          .filter((prop) => prop.access !== "private")
+          .map((prop) => `\`${prop.name}\` `)
+          .join(""),
       });
     }
     if ("methods" in d) {
       fields.push({
         name: "Methods",
-        value: d.methods.map((method) => `\`${method.name}\``).join(""),
+        value: d.methods
+          .filter((method) => method.access !== "private")
+          .map((method) => `\`${method.name}\` `)
+          .join(""),
       });
     }
     if ("type" in d) {
