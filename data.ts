@@ -1,4 +1,4 @@
-import { Documentation } from '../website/src/interfaces/Documentation';
+import { Documentation } from './website/src/interfaces/Documentation';
 import path from 'path';
 const cwd = process.cwd();
 const data = {

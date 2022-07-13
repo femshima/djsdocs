@@ -8,7 +8,7 @@
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
       "name": "dev:watch",
-      "program": "${workspaceFolder}\\src\\index.ts",
+      "program": "${workspaceFolder}\\server\\index.ts",
       "cwd": "${workspaceRoot}/",
       "request": "launch",
       "restart": true,

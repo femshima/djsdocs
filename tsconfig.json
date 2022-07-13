@@ -27,6 +27,6 @@
     /* Completeness */
     "skipLibCheck": true
   },
-  "includes": ["src/**/*.ts"],
-  "exclude": ["src/**/*.test.ts", "./jest.config.ts", "website"]
+  "include": ["src/**/*.ts"],
+  "exclude": ["src/**/*.test.ts"]
 }

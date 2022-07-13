@@ -20,11 +20,10 @@
   "scripts": {
     "build": "tsc",
     "check": "tsc --noEmit",
-    "dev": "ts-node src/index.ts",
-    "dev:watch": "ts-node-dev src/index.ts",
+    "dev": "ts-node server/index.ts",
+    "dev:watch": "ts-node-dev server/index.ts",
     "prepare": "husky install",
     "lint-staged": "lint-staged",
-    "start": "node dist/src/index.js",
     "test": "jest --passWithNoTests"
   },
   "dependencies": {
