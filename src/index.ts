@@ -128,7 +128,7 @@ export default class DocumentationSearch {
       'extends' in entity.object &&
       entity.object.extends
         .flat(2)
-        .map((d) => this.getMarkdownLink(d))
+        .map((d: unknown) => this.getMarkdownLink(`${d}`))
         .join(',');
 
     const fields: EmbedFieldData[] = [];
@@ -195,7 +195,7 @@ export default class DocumentationSearch {
       fields,
       footer: {
         text:
-          'meta' in entity.object
+          'meta' in entity.object && entity.object.meta.path
             ? `[View Source](${this.repositoryURL(
                 entity.package,
                 entity.object.meta.path,

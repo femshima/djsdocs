@@ -76,7 +76,7 @@ describe('Exact matches', () => {
         },
       ],
       footer: {
-        text: '[View Source](https://github.com/discordjs/discord.js/blob/stable/src/util/Util.js#L421)',
+        text: '[View Source](https://github.com/discordjs/discord.js/blob/stable/src/util/Util.js#L432)',
       },
     });
   });
@@ -113,7 +113,7 @@ describe('Ambiguous matches', () => {
         ':regional_indicator_m:[DMChannel.createMessageComponentCollector()](https://discord.js.org/#/docs/discord.js/stable/class/DMChannel?scrollTo=createMessageComponentCollector)',
         ':regional_indicator_p:[DMChannel.createdTimestamp](https://discord.js.org/#/docs/discord.js/stable/class/DMChannel?scrollTo=createdTimestamp)',
         ':regional_indicator_p:[DMChannel.createdAt](https://discord.js.org/#/docs/discord.js/stable/class/DMChannel?scrollTo=createdAt)',
-        ':regional_indicator_m:[NewsChannel.createWebhook()](https://discord.js.org/#/docs/discord.js/stable/class/NewsChannel?scrollTo=createWebhook)',
+        ':regional_indicator_m:[NewsChannel.createInvite()](https://discord.js.org/#/docs/discord.js/stable/class/NewsChannel?scrollTo=createInvite)',
       ].join('\n'),
     });
   });
