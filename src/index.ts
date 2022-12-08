@@ -1,5 +1,4 @@
-import Collection from '@discordjs/collection';
-import { EmbedFieldData, MessageEmbedOptions } from 'discord.js';
+import { Collection, EmbedField, APIEmbed } from 'discord.js';
 import Fuse from 'fuse.js';
 import {
   Documentation,
@@ -112,7 +111,7 @@ export default class DocumentationSearch {
     };
   }
 
-  search(query: string): MessageEmbedOptions {
+  search(query: string): APIEmbed {
     const res = this.fuse.search(query);
     const firstResult: string | undefined = res[0]?.item;
     const firstEntity = firstResult && this.dict.get(firstResult);
@@ -123,7 +122,7 @@ export default class DocumentationSearch {
     }
   }
 
-  private generateDetail(entity: Entity): MessageEmbedOptions {
+  private generateDetail(entity: Entity): APIEmbed {
     const extend =
       'extends' in entity.object &&
       entity.object.extends
@@ -131,10 +130,11 @@ export default class DocumentationSearch {
         .map((d: unknown) => this.getMarkdownLink(`${d}`))
         .join(',');
 
-    const fields: EmbedFieldData[] = [];
+    const fields: EmbedField[] = [];
     if ('props' in entity.object) {
       fields.push({
         name: 'Properties',
+        inline: false,
         value: entity.object.props
           .filter((prop) => prop.access !== 'private')
           .map((prop) => `\`${prop.name}\``)
@@ -145,6 +145,7 @@ export default class DocumentationSearch {
     if ('methods' in entity.object) {
       fields.push({
         name: 'Methods',
+        inline: false,
         value: entity.object.methods
           .filter((method) => method.access !== 'private')
           .map((method) => `\`${method.name}\``)
@@ -155,6 +156,7 @@ export default class DocumentationSearch {
     if ('type' in entity.object) {
       fields.push({
         name: 'Type',
+        inline: false,
         value: entity.object.type
           .flat(3)
           .map((type) => {
@@ -193,21 +195,21 @@ export default class DocumentationSearch {
         entity.object.description
       }`,
       fields,
-      footer: {
-        text:
-          'meta' in entity.object && entity.object.meta.path
-            ? `[View Source](${this.repositoryURL(
+      footer:
+        'meta' in entity.object && entity.object.meta.path
+          ? {
+              text: `[View Source](${this.repositoryURL(
                 entity.package,
                 entity.object.meta.path,
                 entity.object.meta.file,
                 entity.object.meta.line
-              )})`
-            : undefined,
-      },
+              )})`,
+            }
+          : undefined,
     };
   }
 
-  private generateSummary(res: Fuse.FuseResult<string>[]): MessageEmbedOptions {
+  private generateSummary(res: Fuse.FuseResult<string>[]): APIEmbed {
     return {
       title: 'Search Results:',
       description: res
