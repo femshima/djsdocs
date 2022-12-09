@@ -1,7 +1,11 @@
 import DocumentationSearch from '.';
-import data from '../data';
+import { loadSync } from './loader';
 
-const searcher = new DocumentationSearch(data);
+const searcher = new DocumentationSearch(
+  'discord.js/stable',
+  loadSync('discord.js/stable'),
+  true
+);
 
 describe('Exact matches', () => {
   it('class', () => {

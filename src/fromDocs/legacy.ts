@@ -33,30 +33,27 @@ interface Entity<T extends keyof MemberType = keyof MemberType> {
 
 export default class FromLegacyDocs {
   public dict: Collection<string, Entity>;
-  constructor(docs: Record<string, Documentation>) {
-    this.dict = this.getDict(docs);
-  }
-
-  public get names(): string[] {
-    return Array.from(this.dict.keys());
-  }
-
-  private getDict(
-    data: Record<string, Documentation>
-  ): Collection<string, Entity> {
-    return new Collection(
-      Object.entries(data)
-        .map(([k, v]) =>
-          this.getEntities(v).map((entity) => ({
-            ...entity,
-            package: k,
-          }))
-        )
-        .flat()
-        .map((d) => [d.name, d])
+  constructor(src: string, docs: Documentation) {
+    this.dict = new Collection(
+      this.getEntities(docs).map((entity) => [
+        entity.name,
+        {
+          ...entity,
+          package: src,
+        },
+      ])
     );
   }
 
+  public getNames(includePrivate: boolean): string[] {
+    if (includePrivate) {
+      return Array.from(this.dict.keys());
+    } else {
+      return Array.from(
+        this.dict.filter((v) => v.object.access !== 'private').keys()
+      );
+    }
+  }
   private getEntities(docs: Documentation): Omit<Entity, 'package'>[] {
     return [
       docs.classes?.map((o) => [
