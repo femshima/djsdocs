@@ -1,7 +1,7 @@
 import { APIEmbed } from 'discord.js';
 import Fuse from 'fuse.js';
 import { Documentation } from '../website/src/interfaces/Documentation';
-import FromLegacyDocs from './fromDocs';
+import FromLegacyDocs from './fromDocs/legacy';
 import EntityToEmbed from './toEmbed';
 
 export default class DocumentationSearch {
