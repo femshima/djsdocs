@@ -27,5 +27,5 @@
        ```
 
 6. Set required script properties
-    - fileId: The ID of the folder from 5.
+    - folderId: The ID of the folder from 5.
 7. Deploy the GAS project

@@ -8,9 +8,9 @@ interface ApiEventGet {
 }
 
 let Properties = PropertiesService.getScriptProperties();
-let fileId = Properties.getProperty('fileId');
-if (!fileId) throw new Error('fileId is undefined');
-let folder = DriveApp.getFolderById(fileId);
+let folderId = Properties.getProperty('folderId');
+if (!folderId) throw new Error('folderId is undefined');
+let folder = DriveApp.getFolderById(folderId);
 
 export function doGet(e: ApiEventGet): unknown {
   let { query, includePrivate, src } = e.parameter;
