@@ -2,7 +2,6 @@ import type { APIEmbed } from 'discord.js';
 import Fuse from 'fuse.js';
 import { Documentation } from '../website/src/interfaces/Documentation';
 import FromLegacyDocs from './fromDocs/legacy';
-import { load } from './loader';
 import EntityToEmbed from './toEmbed';
 
 export default class DocumentationSearch {
@@ -18,14 +17,6 @@ export default class DocumentationSearch {
     this.to = new EntityToEmbed(this.from.dict);
 
     this.fuse = new Fuse(this.from.getNames(includePrivate));
-  }
-
-  public static async loadAndConstruct(
-    src: string,
-    includePrivate: boolean
-  ): Promise<DocumentationSearch> {
-    const data = await load(src);
-    return new DocumentationSearch(src, data, includePrivate);
   }
 
   public search(query: string): APIEmbed {

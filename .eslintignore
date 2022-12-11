@@ -1,2 +1,5 @@
 dist/
 *test.ts
+webpack.config.js
+/gas
+/server
