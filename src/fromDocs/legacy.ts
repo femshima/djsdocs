@@ -1,4 +1,4 @@
-import { Collection } from 'discord.js';
+import { Collection } from '@discordjs/collection';
 import {
   Documentation,
   DocumentationClass,
@@ -7,20 +7,22 @@ import {
   DocumentationClassProperty,
 } from '../../website/src/interfaces/Documentation';
 
-type ExtractFromArray<T> = T extends Array<infer R> ? R : never;
+type ExtractFromArray<T> = T extends (infer R)[] ? R : never;
 
 type DocumentationTypeDefinition = ExtractFromArray<Documentation['typedefs']>;
 type DocumentationTypeDefinitionProperty = ExtractFromArray<
   DocumentationTypeDefinition['props']
 >;
 
-type ObjectTypes = 'Class' | 'Typedef' | 'Interface';
+type ObjectTypes = 'Class' | 'Interface' | 'Typedef';
 
 interface MemberType {
+  /* eslint-disable @typescript-eslint/naming-convention */
   Name: DocumentationClass | DocumentationTypeDefinition;
   Event: DocumentationClassEvent;
   Method: DocumentationClassMethod;
   Prop: DocumentationClassProperty | DocumentationTypeDefinitionProperty;
+  /* eslint-enable @typescript-eslint/naming-convention */
 }
 
 interface Entity<T extends keyof MemberType = keyof MemberType> {
@@ -33,7 +35,7 @@ interface Entity<T extends keyof MemberType = keyof MemberType> {
 
 export default class FromLegacyDocs {
   public dict: Collection<string, Entity>;
-  constructor(src: string, docs: Documentation) {
+  public constructor(src: string, docs: Documentation) {
     this.dict = new Collection(
       this.getEntities(docs).map((entity) => [
         entity.name,
@@ -56,6 +58,7 @@ export default class FromLegacyDocs {
   }
   private getEntities(docs: Documentation): Omit<Entity, 'package'>[] {
     return [
+      /* eslint-disable @typescript-eslint/no-unnecessary-condition */
       docs.classes?.map((o) => [
         this.getEntity('Name', 'Class', o, o),
         o.events?.map((e) => this.getEntity('Event', 'Class', o, e)),
@@ -72,6 +75,7 @@ export default class FromLegacyDocs {
         o.methods?.map((m) => this.getEntity('Method', 'Interface', o, m)),
         o.props?.map((p) => this.getEntity('Prop', 'Interface', o, p)),
       ]),
+      /* eslint-enable @typescript-eslint/no-unnecessary-condition */
     ]
       .flat(3)
       .filter(

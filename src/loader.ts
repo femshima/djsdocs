@@ -19,7 +19,7 @@ export async function load(src: string): Promise<Documentation> {
     ),
     { encoding: 'utf-8' }
   );
-  return JSON.parse(content);
+  return JSON.parse(content) as Documentation;
 }
 
 //Synchronous functions. Only for testing.
@@ -38,5 +38,5 @@ export function loadSync(src: string): Documentation {
     ),
     { encoding: 'utf-8' }
   );
-  return JSON.parse(content);
+  return JSON.parse(content) as Documentation;
 }

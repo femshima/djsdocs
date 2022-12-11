@@ -1,4 +1,5 @@
-import { Collection, EmbedField, APIEmbed } from 'discord.js';
+import { Collection } from '@discordjs/collection';
+import type { EmbedField, APIEmbed } from 'discord.js';
 import Fuse from 'fuse.js';
 
 import {
@@ -10,13 +11,15 @@ import {
   DocumentationClassProperty,
 } from './types';
 
-type ObjectTypes = 'Class' | 'Typedef' | 'Interface';
+type ObjectTypes = 'Class' | 'Interface' | 'Typedef';
 
 interface MemberType {
+  /* eslint-disable @typescript-eslint/naming-convention */
   Name: DocumentationClass | DocumentationTypeDefinition;
   Event: DocumentationClassEvent;
   Method: DocumentationClassMethod;
   Prop: DocumentationClassProperty | DocumentationProperty;
+  /* eslint-enable @typescript-eslint/naming-convention */
 }
 
 interface Entity<T extends keyof MemberType = keyof MemberType> {
@@ -28,7 +31,7 @@ interface Entity<T extends keyof MemberType = keyof MemberType> {
 }
 
 export default class EntityToEmbed {
-  constructor(private dict: Collection<string, Entity>) {}
+  public constructor(private readonly dict: Collection<string, Entity>) {}
 
   public generateDetail(entity: Entity): APIEmbed {
     const extend =
@@ -36,7 +39,7 @@ export default class EntityToEmbed {
       entity.object.extends &&
       entity.object.extends
         .flat(2)
-        .map((d: unknown) => this.getMarkdownLink(`${d}`))
+        .map((d: unknown) => this.getMarkdownLink(String(d)))
         .join(',');
 
     const fields: EmbedField[] = [];
@@ -101,7 +104,7 @@ export default class EntityToEmbed {
       title: `__${entity.name}__`,
       url: this.docsURL(entity),
       description: `${extend ? `*extends ${extend}*` : ''}\n${
-        entity.object.description
+        entity.object.description ?? ''
       }`,
       fields,
       footer:
@@ -136,7 +139,7 @@ export default class EntityToEmbed {
     };
   }
 
-  private docsURL(entity: Entity) {
+  private docsURL(entity: Entity): string {
     const search = entity.name
       .replace('#', '?scrollTo=e-')
       .replace('.', '?scrollTo=')
@@ -150,15 +153,15 @@ export default class EntityToEmbed {
     pkg: string,
     path: string,
     file?: string,
-    line?: string | number
-  ) {
+    line?: number | string
+  ): string {
     const [_, status] = pkg.split('/');
     return `https://github.com/discordjs/discord.js/blob/${status}/${path}${
       file ? `/${file}` : ''
     }${line ? `#L${line}` : ''}`;
   }
 
-  private getMarkdownLink(name: string) {
+  private getMarkdownLink(name: string): string {
     const item = this.dict.get(name);
     if (!item) return name;
     return `[${name}](${this.docsURL(item)})`;
@@ -167,7 +170,7 @@ export default class EntityToEmbed {
   private getObjectTypeEmoji(
     objType: ObjectTypes,
     memberType: keyof MemberType
-  ) {
+  ): string {
     switch (memberType) {
       case 'Name':
         switch (objType) {
