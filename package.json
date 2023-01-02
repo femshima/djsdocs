@@ -8,7 +8,7 @@
     "@typescript-eslint/parser": "^5.47.1",
     "copy-webpack-plugin": "^11.0.0",
     "discord.js": "^14.7.1",
-    "eslint": "^8.30.0",
+    "eslint": "^8.31.0",
     "eslint-config-prettier": "^8.5.0",
     "gas-webpack-plugin": "^2.3.0",
     "husky": "^8.0.2",
